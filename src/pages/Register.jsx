@@ -7,7 +7,6 @@ import hero1 from "../assets/Images/register1.png";
 import "../style/login.css";
 
 const Register = () => {
-  // useState for input values and validation errors
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -18,8 +17,8 @@ const Register = () => {
 
   const [errors, setErrors] = useState({});
 
-  // Function for changing input values and clearing errors
-  const handleChange = (field, value) => {
+  const handleChange = (field, e) => {
+    const value = e.target.value;  // Access the value from the event object
     const updateError = { ...errors };
     delete updateError[field];
     setErrors(updateError);
@@ -41,7 +40,7 @@ const Register = () => {
         setAddress(value);
         break;
       case 'password':
-        setPassword(value);
+        handlePasswordChange(e); // Pass the event object to handlePasswordChange
         break;
       case 'confirmPassword':
         setConfirmPassword(value);
@@ -51,7 +50,23 @@ const Register = () => {
     }
   };
 
-  // Function for input validation
+  const handlePasswordChange = (e) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+
+    if (newPassword.length < 8 || newPassword.length > 12) {
+      setErrors(prevErrors => ({
+        ...prevErrors,
+        password: "Password must be between 8 to 12 characters long."
+      }));
+    } else {
+      setErrors(prevErrors => {
+        const { password, ...rest } = prevErrors;
+        return rest;
+      });
+    }
+  };
+
   const validate = () => {
     const errors = {};
     const nameRegex = /^[A-Z][a-zA-Z]*$/;
@@ -88,8 +103,10 @@ const Register = () => {
 
     if (!password) {
       errors.password = "Password is required.";
-    } else if (password.length < 6 || !password.match(passwordRegex)) {
-      errors.password = "Password must be at least 6 characters long and contain at least 1 special character.";
+    } else if (password.length < 8 || password.length > 12) {
+      errors.password = "Password must be between 8 to 12 characters long.";
+    } else if (!password.match(passwordRegex)) {
+      errors.password = "Password must contain at least 1 special character.";
     }
 
     if (!confirmPassword) {
@@ -102,7 +119,6 @@ const Register = () => {
     return Object.keys(errors).length === 0;
   };
 
-  // Function for handling form submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -111,7 +127,6 @@ const Register = () => {
       return;
     }
 
-    // Making JSON data object
     const data = {
       firstName,
       lastName,
@@ -122,7 +137,6 @@ const Register = () => {
       confirmPassword
     };
 
-    // Making API call
     createUserApi(data).then((res) => {
       if (res.data.success === false) {
         toast.error(res.data.message);
@@ -137,7 +151,6 @@ const Register = () => {
       console.log(err.message);
     });
 
-    // Check test API
     testApi().then((res) => {
       console.log(res.data);
     });
@@ -154,25 +167,25 @@ const Register = () => {
           <div className="form-container">
             <h2 style={{ marginBottom: '6%', marginTop: '2%', fontWeight: 'bolder' }}>Create an account</h2>
             <form>
-              <input onChange={(e) => handleChange('firstName', e.target.value)} type="text" placeholder="First Name" value={firstName} />
+              <input onChange={(e) => handleChange('firstName', e)} type="text" placeholder="First Name" value={firstName} />
               {errors.firstName && <div className="error" style={{ color: 'red' }}>{errors.firstName}</div>}
 
-              <input onChange={(e) => handleChange('lastName', e.target.value)} type="text" placeholder="Last Name" value={lastName} />
+              <input onChange={(e) => handleChange('lastName', e)} type="text" placeholder="Last Name" value={lastName} />
               {errors.lastName && <div className="error" style={{ color: 'red' }}>{errors.lastName}</div>}
 
-              <input onChange={(e) => handleChange('email', e.target.value)} type="email" placeholder="Email" value={email} />
+              <input onChange={(e) => handleChange('email', e)} type="email" placeholder="Email" value={email} />
               {errors.email && <div className="error" style={{ color: 'red' }}>{errors.email}</div>}
 
-              <input onChange={(e) => handleChange('contactNumber', e.target.value)} type="number" placeholder="Phone number" value={contactNumber} />
+              <input onChange={(e) => handleChange('contactNumber', e)} type="number" placeholder="Phone number" value={contactNumber} />
               {errors.contactNumber && <div className="error" style={{ color: 'red' }}>{errors.contactNumber}</div>}
 
-              <input onChange={(e) => handleChange('address', e.target.value)} type="text" placeholder="Address" value={address} />
+              <input onChange={(e) => handleChange('address', e)} type="text" placeholder="Address" value={address} />
               {errors.address && <div className="error" style={{ color: 'red' }}>{errors.address}</div>}
 
-              <input onChange={(e) => handleChange('password', e.target.value)} type="password" placeholder="Password" value={password} />
+              <input onChange={(e) => handleChange('password', e)} type="password" placeholder="Password" value={password} />
               {errors.password && <div className="error" style={{ color: 'red' }}>{errors.password}</div>}
 
-              <input onChange={(e) => handleChange('confirmPassword', e.target.value)} type="password" placeholder="Confirm Password" value={confirmPassword} />
+              <input onChange={(e) => handleChange('confirmPassword', e)} type="password" placeholder="Confirm Password" value={confirmPassword} />
               {errors.confirmPassword && <div className="error" style={{ color: 'red' }}>{errors.confirmPassword}</div>}
 
               <button className='buttonn' onClick={handleSubmit} type="submit" style={{ fontSize: '20px' }}>Create account</button>

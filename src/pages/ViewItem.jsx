@@ -3,16 +3,20 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-
+import { toast } from 'react-toastify';
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { getAllCategories } from "../apis/Api";
 import "../style/viewItem.css";
-
+import { useNavigate } from "react-router-dom"; 
 const ViewItem = () => {
   const [items, setItems] = useState([]);
   const { categoryId } = useParams();
   const [category, setCategory] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    return !!localStorage.getItem('token'); // Assuming you store a token in localStorage
+  });
 
+  const navigate = useNavigate();
   useEffect(() => {
     getAllCategories()
       .then((res) => {
@@ -31,6 +35,22 @@ const ViewItem = () => {
         console.error("Error fetching categories: ", error);
       });
   }, [categoryId]);
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
+  const handleViewDetailsClick = (itemId) => {
+    if (!isLoggedIn) {
+      toast.error("Please log in first");
+      navigate("/login");
+    } else {
+      navigate(`/itemdetails/${itemId}`);
+    }
+  };
 
   return (
     
@@ -69,9 +89,12 @@ const ViewItem = () => {
                 <span className="price-dim">/week</span>
               </span>
             </div>
-            <Link to={`/itemdetails/${item._id}`} className="btn btn-details-item">
-              View details
-            </Link>
+            <button
+                  className="btn btn-details-item"
+                  onClick={() => handleViewDetailsClick(item._id)}
+                >
+                  View details
+                </button>
           </div>
         </div>
       ))}

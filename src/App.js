@@ -68,28 +68,35 @@ function App() {
         <Route path="/" element={<Homepage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/viewItem/:categoryId/item" element={<ViewItem />} />
+        <Route path="/viewCategories" element={<ViewCategory />} />
+        <Route path="/service" element={<Service />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/filteredItems" element={<FilteredItemsPage />} />
+        <Route path="/faqPage" element={<FAQPage />} />
+        <Route path="/aboutUs" element={<AboutUs />} />
+          <Route path="/policy" element={<PolicyPage />} />
+          <Route path="/terms" element={<TermPage />} />
         {/* //user route */}
         <Route element={<UserRoutes />}>
           <Route path="/profile" element={<UserProfile />} />
           {/* <Route path='/category/:categoryId/menu' element={<ViewMenu/>}/> */}
-          <Route path="/viewItem/:categoryId/item" element={<ViewItem />} />
-          <Route path="/viewCategories" element={<ViewCategory />} />
-          <Route path="/service" element={<Service />} />
-          <Route path="/contact" element={<ContactPage />} />
+         
+         
+       
+          
           <Route path="/itemdetails/:id" element={<ItemDetails />} />
           
           <Route path="/orderHistory" element={ <OrderHistory/>} />
 
-          <Route path="/filteredItems" element={<FilteredItemsPage />} />
+        
          
           <Route path="/cart" element={<AddToCart/>} />
           <Route path="/shippingForm" element={<ShippingInfo />} />
           <Route path="/review" element={<ReviewPage />} />
           <Route path="/success" element={<Thankyou />} />
-          <Route path="/faqPage" element={<FAQPage />} />
-          <Route path="/aboutUs" element={<AboutUs />} />
-          <Route path="/policy" element={<PolicyPage />} />
-          <Route path="/terms" element={<TermPage />} />
+         
+        
 
 
 

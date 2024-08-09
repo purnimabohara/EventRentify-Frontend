@@ -1,7 +1,8 @@
 
 import React, { useEffect, useState,useRef } from "react";
 import Navbar from "../components/Navbar";
-
+import { toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom"; 
 import {  FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
 import { Link } from "react-router-dom"; // Import Link from react-router-dom
 import { FaMapMarkerAlt, FaCalendarAlt, FaBoxOpen } from 'react-icons/fa';
@@ -30,6 +31,7 @@ const Homepage = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [sortOption, setSortOption] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");
+  const [isLoggedIn, setIsLoggedIn] = useState(false); 
 
   const listItemsRef = useRef([]);
   useEffect(() => {
@@ -44,7 +46,16 @@ const Homepage = () => {
       });
   }, []);
 
-  
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
+
+  const navigate = useNavigate();
 
    useEffect(() => {
     listItemsRef.current.forEach((item, index) => {
@@ -68,6 +79,16 @@ const Homepage = () => {
       // Optionally trigger animation or other actions when in view
     }
   }, [inView]);
+
+  const handleSearchClick = (e) => {
+    e.preventDefault();
+    if (!isLoggedIn) {
+      toast.error("Please log in first");
+      navigate("/login");
+    } else {
+      navigate("/viewCategories");
+    }
+  };
 
  
   return (
@@ -95,7 +116,7 @@ const Homepage = () => {
               </p>
            
             </div>
-            <button className="btn-details-home" >Search Now</button>
+            <button onClick={handleSearchClick} className="btn-details-home" >Search Now</button>
           </div>
          
         </div>

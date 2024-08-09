@@ -1,15 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { submitRequest } from "../apis/Api";
-import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-
+import Navbar from "../components/Navbar";
 import "../style/contact.css";
 
-
 const ContactPage = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const [userName, setFullName] = useState("");
+  const [user, setUser] = useState(null);
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState("");
   const [size, setSize] = useState("");
@@ -17,10 +15,25 @@ const ContactPage = () => {
   const [colour, setColour] = useState("");
   const [weight, setWeight] = useState("");
   const [quantity, setQuantity] = useState("");
-
   const [phone, setPhone] = useState("");
   const [productImage, setProductImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userData = localStorage.getItem("user");
+
+    console.log("Token:", token); // Debugging statement
+    console.log("User Data:", userData); // Debugging statement
+
+    setIsLoggedIn(!!token); // Set isLoggedIn to true if token exists
+    if (userData) {
+      setUser(JSON.parse(userData)); // Parse and set user data
+    }
+  }, []);
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -31,22 +44,53 @@ const ContactPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log(productName, phone,size,material,colour,weight,quantity, price, productImage);
+    console.log("isLoggedIn:", isLoggedIn); // Debugging statement
+
+    if (!isLoggedIn) {
+      toast.error("Please log in first");
+      navigate("/login");
+      return;
+    }
+
+    // Check if all fields are filled
+    if (
+      !productName ||
+      !price ||
+      !phone ||
+      !size ||
+      !material ||
+      !colour ||
+      !weight ||
+      !quantity ||
+      !productImage
+    ) {
+      toast.error("Please fill out all fields.");
+      return;
+    }
+
+    console.log(
+      productName,
+      phone,
+      size,
+      material,
+      colour,
+      weight,
+      quantity,
+      price,
+      productImage
+    );
 
     // Constructing FormData
     const formData = new FormData();
     formData.append("userName", `${user.firstName} ${user.lastName}`);
     formData.append("productName", productName);
     formData.append("phone", phone);
-   
     formData.append("size", size);
     formData.append("material", material);
     formData.append("colour", colour);
     formData.append("weight", weight);
     formData.append("price", price);
     formData.append("quantity", quantity);
-
-
     formData.append("productImage", productImage);
 
     // API call
@@ -84,7 +128,7 @@ const ContactPage = () => {
           </div>
           <div className="form-containerr">
             <h2>Become renter</h2>
-            <form onSubmit={handleSubmit}>
+            <form>
               <input
                 type="text"
                 value={productName}
@@ -113,7 +157,7 @@ const ContactPage = () => {
                 required
                 placeholder="Quantity"
               />
-               <input
+              <input
                 type="text"
                 value={size}
                 onChange={(e) => setSize(e.target.value)}
@@ -134,14 +178,13 @@ const ContactPage = () => {
                 required
                 placeholder="Colour"
               />
-               <input
+              <input
                 type="text"
                 value={material}
                 onChange={(e) => setMaterial(e.target.value)}
                 required
                 placeholder="Material"
               />
-              
               <input
                 onChange={handleImageUpload}
                 type="file"
@@ -155,15 +198,16 @@ const ContactPage = () => {
                   alt="product image"
                 />
               )}
-              <button type="submit">Send Request</button>
+              <button type="submit" onClick={handleSubmit}>
+                Send Request
+              </button>
             </form>
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };
 
 export default ContactPage;
-
