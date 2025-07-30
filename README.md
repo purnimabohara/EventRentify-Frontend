@@ -74,11 +74,9 @@ This interface was built following a structured user-centered design process:
   &nbsp;
   <img src="src/assets/Images/Services.png" width="45%" alt="Generated PDF Screenshot">
    
-</p> okay tell me why is the third picture slightly below than 4th one
+</p>
 
 
 ---
-
-> This frontend reflects thoughtful UX design and real-world problem-solving. Built with usability and business needs in mind, it balances functionality with clarity and ease of use.
 
 [🔙 Back to Full Secure Project Repo](https://github.com/purnimabohara/EventRentify_Secure_Full_Project)
