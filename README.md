@@ -67,17 +67,15 @@ This interface was built following a structured user-centered design process:
 <p align="center">
   <img src="src/assets/Images/Landing page.png" width="45%" alt="OCR Screenshot">
   &nbsp;
-  <img src="src/assets/Images/Homepage.png" width="45%" alt="OCR Screenshot">
-
   
-
+<img src="src/assets/Images/Categories.png" width="45%" alt="Generated PDF Screenshot">
 </p>
 <p align="center">
-    <img src="src/assets/Images/Categories.png" width="45%" alt="Generated PDF Screenshot">
+  <img src="src/assets/Images/Homepage.png" width="45%" alt="Homepage" style="vertical-align: top;">
   &nbsp;
-  <img src="src/assets/Images/Services.png" width="45%" alt="Generated PDF Screenshot">
-   
+  <img src="src/assets/Images/Services.png" width="45%" alt="Services" style="vertical-align: top;">
 </p>
+
 
 ---
 
